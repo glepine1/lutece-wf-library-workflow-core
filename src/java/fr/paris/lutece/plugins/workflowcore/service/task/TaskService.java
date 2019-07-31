@@ -33,12 +33,14 @@
  */
 package fr.paris.lutece.plugins.workflowcore.service.task;
 
-import fr.paris.lutece.plugins.workflowcore.business.task.ITaskDAO;
-
 import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
+
+import fr.paris.lutece.plugins.workflowcore.business.config.ITaskConfig;
+import fr.paris.lutece.plugins.workflowcore.business.task.ITaskDAO;
+import fr.paris.lutece.plugins.workflowcore.service.config.ITaskConfigService;
 
 /**
  *
@@ -148,6 +150,33 @@ public class TaskService implements ITaskService
             task.setOrder( nOrder );
             update( task );
             nOrder++;
+        }
+    }
+    
+    @Override
+    public void copyTask( ITask task, List<ITaskConfigService> listTaskConfigService )
+    {
+    	int nIdTaskToCopy = task.getId( );
+
+        // get the maximum order number in this workflow and set max+1
+        int nMaximumOrder = findMaximumOrderByActionId( task.getAction( ).getId( ) );
+        task.setOrder( nMaximumOrder + 1 );
+
+        // Create the new task (taskToCopy id will be update with the new
+        // idTask)
+        create( task );
+        int idTaskNew = task.getId( );;
+
+        // For each taskConfigService, update parameter if exists
+        for ( ITaskConfigService taskConfigService : listTaskConfigService )
+        {
+            ITaskConfig taskConfig = taskConfigService.findByPrimaryKey( nIdTaskToCopy );
+
+            if ( taskConfig != null )
+            {
+                taskConfig.setIdTask( idTaskNew );
+                taskConfigService.create( taskConfig );
+            }
         }
     }
 }

@@ -36,6 +36,8 @@ package fr.paris.lutece.plugins.workflowcore.service.task;
 import java.util.List;
 import java.util.Locale;
 
+import fr.paris.lutece.plugins.workflowcore.service.config.ITaskConfigService;
+
 /**
  *
  * ITaskService
@@ -148,4 +150,10 @@ public interface ITaskService
      *            the locale
      */
     void initializeTaskOrder( int nIdAction, Locale locale );
+    
+    /**
+     * Copy the task.
+     * @param task
+     */
+    void copyTask( ITask task, List<ITaskConfigService> listTaskConfigService );
 }
