@@ -78,4 +78,17 @@ public interface IPrerequisiteManagementService
      * @return The configuration, or null if the prerequisite has no configuration
      */
     IPrerequisiteConfig getPrerequisiteConfiguration( int nIdPrerequisite, IAutomaticActionPrerequisiteService prerequisiteService );
+    
+    /**
+     * Copy the prerequisites from an action to another.
+     * @param nIdActionSource the id of the source action
+     * @param nIdActionTarget the id of the targetr action
+     */
+    void copyPrerequisite( int nIdActionSource, int nIdActionTarget );
+    
+    /**
+     * Delete all the prerequisites of an action.
+     * @param nIdAction
+     */
+    void deletePrerequisiteByAction( int nIdAction );
 }

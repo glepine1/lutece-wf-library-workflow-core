@@ -35,9 +35,11 @@ package fr.paris.lutece.plugins.workflowcore.service.action;
 
 import fr.paris.lutece.plugins.workflowcore.business.action.Action;
 import fr.paris.lutece.plugins.workflowcore.business.action.ActionFilter;
+import fr.paris.lutece.plugins.workflowcore.service.config.ITaskConfigService;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 /**
  *
@@ -175,4 +177,12 @@ public interface IActionService
      *            the workflow id
      */
     void initializeActionOrder( int nIdWorkflow );
+    
+    /**
+     * Copy the action.
+     * @param action
+     * @param locale
+     * @param strNewNameForCopy
+     */
+    void copyAction( Action action, Locale locale, String strNewNameForCopy, List<ITaskConfigService> listTaskConfigService );
 }

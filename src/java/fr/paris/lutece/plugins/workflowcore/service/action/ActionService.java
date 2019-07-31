@@ -33,19 +33,21 @@
  */
 package fr.paris.lutece.plugins.workflowcore.service.action;
 
-import fr.paris.lutece.plugins.workflowcore.business.action.Action;
-import fr.paris.lutece.plugins.workflowcore.business.action.ActionFilter;
-import fr.paris.lutece.plugins.workflowcore.business.action.IActionDAO;
-import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceHistory;
-import fr.paris.lutece.plugins.workflowcore.service.resource.IResourceHistoryService;
-import fr.paris.lutece.plugins.workflowcore.service.task.ITask;
-import fr.paris.lutece.plugins.workflowcore.service.task.ITaskService;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
+
+import fr.paris.lutece.plugins.workflowcore.business.action.Action;
+import fr.paris.lutece.plugins.workflowcore.business.action.ActionFilter;
+import fr.paris.lutece.plugins.workflowcore.business.action.IActionDAO;
+import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceHistory;
+import fr.paris.lutece.plugins.workflowcore.service.config.ITaskConfigService;
+import fr.paris.lutece.plugins.workflowcore.service.prerequisite.IPrerequisiteManagementService;
+import fr.paris.lutece.plugins.workflowcore.service.resource.IResourceHistoryService;
+import fr.paris.lutece.plugins.workflowcore.service.task.ITask;
+import fr.paris.lutece.plugins.workflowcore.service.task.ITaskService;
 
 /**
  *
@@ -61,6 +63,8 @@ public class ActionService implements IActionService
     private IResourceHistoryService _resourceHistoryService;
     @Inject
     private ITaskService _taskService;
+    @Inject
+    private IPrerequisiteManagementService _prerequisiteManagementService;
 
     /**
      * {@inheritDoc}
@@ -249,5 +253,28 @@ public class ActionService implements IActionService
             update( action );
             nOrder++;
         }
+    }
+    
+    @Override
+    public void copyAction( Action action, Locale locale, String strNewNameForCopy, List<ITaskConfigService> listTaskConfigService )
+    {
+    	 int idActionOld = action.getId( );
+    	 int nMaximumOrder = findMaximumOrderByWorkflowId( action.getWorkflow( ).getId( ) );
+    	 action.setOrder( nMaximumOrder + 1 );
+    	 
+    	 List<ITask> listLinkedTasks = _taskService.getListTaskByIdAction( idActionOld, locale );
+    	 
+    	 create( action );
+         int idActionNew = action.getId( );
+         for ( ITask task : listLinkedTasks )
+         {
+             // for each we change the linked action
+             task.setAction( action );
+
+             // and then we create the new task duplicated
+             _taskService.copyTask( task, listTaskConfigService );
+         }
+         
+         _prerequisiteManagementService.copyPrerequisite( idActionOld, idActionNew );
     }
 }
