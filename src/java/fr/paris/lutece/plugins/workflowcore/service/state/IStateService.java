@@ -35,8 +35,10 @@ package fr.paris.lutece.plugins.workflowcore.service.state;
 
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.plugins.workflowcore.business.state.StateFilter;
+import fr.paris.lutece.plugins.workflowcore.service.config.ITaskConfigService;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  *
@@ -161,4 +163,10 @@ public interface IStateService
      *            the workflow id
      */
     void initializeStateOrder( int nIdWorkflow );
+    
+    /**
+     * Copy the State.
+     * @param state
+     */
+    void copyState( State state, Locale locale, String strNewNameForCopy, List<ITaskConfigService> listTaskConfigService );
 }

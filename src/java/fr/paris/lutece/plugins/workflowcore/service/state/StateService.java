@@ -33,15 +33,20 @@
  */
 package fr.paris.lutece.plugins.workflowcore.service.state;
 
+import java.util.List;
+import java.util.Locale;
+
+import javax.inject.Inject;
+
+import fr.paris.lutece.plugins.workflowcore.business.action.Action;
+import fr.paris.lutece.plugins.workflowcore.business.action.ActionFilter;
 import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceWorkflow;
 import fr.paris.lutece.plugins.workflowcore.business.state.IStateDAO;
 import fr.paris.lutece.plugins.workflowcore.business.state.State;
 import fr.paris.lutece.plugins.workflowcore.business.state.StateFilter;
+import fr.paris.lutece.plugins.workflowcore.service.action.IActionService;
+import fr.paris.lutece.plugins.workflowcore.service.config.ITaskConfigService;
 import fr.paris.lutece.plugins.workflowcore.service.resource.IResourceWorkflowService;
-
-import java.util.List;
-
-import javax.inject.Inject;
 
 /**
  *
@@ -55,6 +60,9 @@ public class StateService implements IStateService
     private IStateDAO _stateDAO;
     @Inject
     private IResourceWorkflowService _resourceWorkflowService;
+    
+    @Inject
+    private IActionService _actionService;
 
     /**
      * {@inheritDoc}
@@ -196,6 +204,33 @@ public class StateService implements IStateService
             state.setOrder( nOrder );
             update( state );
             nOrder++;
+        }
+    }
+    
+    @Override
+    public void copyState( State state, Locale locale, String strNewNameForCopy, List<ITaskConfigService> listTaskConfigService )
+    {
+    	int idStateOld = state.getId( );
+    	state.setName( strNewNameForCopy );
+        // get the maximum order number in this workflow and set max+1
+        int nMaximumOrder = findMaximumOrderByWorkflowId( state.getWorkflow( ).getId( ) );
+        state.setOrder( nMaximumOrder + 1 );
+        create( state );
+        
+        ActionFilter automaticReflexiveActionFilter = new ActionFilter( );
+        automaticReflexiveActionFilter.setAutomaticReflexiveAction( true );
+        automaticReflexiveActionFilter.setIdStateAfter( idStateOld );
+        automaticReflexiveActionFilter.setIdStateBefore( idStateOld );
+
+        List<Action> listAutomaticReflexiveActionsOfWorkflow = _actionService.getListActionByFilter( automaticReflexiveActionFilter );
+
+        for ( Action action : listAutomaticReflexiveActionsOfWorkflow )
+        {
+        	 action.getWorkflow( ).setId( state.getWorkflow( ).getId( ) );
+        	 action.setStateAfter( state );
+             action.setStateBefore( state );
+             
+             _actionService.copyAction( action, locale, action.getName( ), listTaskConfigService );
         }
     }
 }
