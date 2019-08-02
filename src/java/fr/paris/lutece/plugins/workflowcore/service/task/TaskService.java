@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.workflowcore.service.task;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -154,7 +155,7 @@ public class TaskService implements ITaskService
     }
     
     @Override
-    public void copyTask( ITask task, List<ITaskConfigService> listTaskConfigService )
+    public void copyTask( ITask task, List<ITaskConfigService> listTaskConfigService, Map<Integer, Integer> mapNewStates )
     {
     	int nIdTaskToCopy = task.getId( );
 
@@ -174,8 +175,9 @@ public class TaskService implements ITaskService
 
             if ( taskConfig != null )
             {
-                taskConfig.setIdTask( idTaskNew );
-                taskConfigService.create( taskConfig );
+            	ITaskConfig newTaskConfig = taskConfig.copyConfigWithNewStates( mapNewStates );
+            	newTaskConfig.setIdTask( idTaskNew );
+                taskConfigService.create( newTaskConfig );
             }
         }
     }

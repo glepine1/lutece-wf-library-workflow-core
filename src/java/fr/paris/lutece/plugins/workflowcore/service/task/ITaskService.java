@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.workflowcore.service.task;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import fr.paris.lutece.plugins.workflowcore.service.config.ITaskConfigService;
 
@@ -155,5 +156,5 @@ public interface ITaskService
      * Copy the task.
      * @param task
      */
-    void copyTask( ITask task, List<ITaskConfigService> listTaskConfigService );
+    void copyTask( ITask task, List<ITaskConfigService> listTaskConfigService, Map<Integer, Integer> mapNewStates );
 }

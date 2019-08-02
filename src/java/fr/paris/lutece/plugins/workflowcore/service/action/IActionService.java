@@ -40,6 +40,7 @@ import fr.paris.lutece.plugins.workflowcore.service.config.ITaskConfigService;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  *
@@ -184,5 +185,5 @@ public interface IActionService
      * @param locale
      * @param strNewNameForCopy
      */
-    void copyAction( Action action, Locale locale, String strNewNameForCopy, List<ITaskConfigService> listTaskConfigService );
+    void copyAction( Action action, Locale locale, String strNewNameForCopy, List<ITaskConfigService> listTaskConfigService, Map<Integer, Integer> mapNewStates );
 }

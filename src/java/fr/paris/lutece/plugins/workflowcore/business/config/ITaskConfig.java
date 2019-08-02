@@ -33,6 +33,8 @@
  */
 package fr.paris.lutece.plugins.workflowcore.business.config;
 
+import java.util.Map;
+
 /**
  *
  * ITaskConfig
@@ -54,4 +56,15 @@ public interface ITaskConfig
      *            id task
      */
     void setIdTask( int idTask );
+    
+    /**
+     * Return the config after using the new states id.
+     * Needed for copy of workflow.
+     * @param mapNewStates
+     * @return
+     */
+    default ITaskConfig copyConfigWithNewStates( Map<Integer, Integer> mapNewStates )
+    {
+    	return this;
+    }
 }

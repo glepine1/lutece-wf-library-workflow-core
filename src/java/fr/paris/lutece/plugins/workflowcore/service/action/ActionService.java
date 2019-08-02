@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.workflowcore.service.action;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -256,7 +257,7 @@ public class ActionService implements IActionService
     }
     
     @Override
-    public void copyAction( Action action, Locale locale, String strNewNameForCopy, List<ITaskConfigService> listTaskConfigService )
+    public void copyAction( Action action, Locale locale, String strNewNameForCopy, List<ITaskConfigService> listTaskConfigService, Map<Integer, Integer> mapNewStates )
     {
     	 int idActionOld = action.getId( );
     	 int nMaximumOrder = findMaximumOrderByWorkflowId( action.getWorkflow( ).getId( ) );
@@ -272,7 +273,7 @@ public class ActionService implements IActionService
              task.setAction( action );
 
              // and then we create the new task duplicated
-             _taskService.copyTask( task, listTaskConfigService );
+             _taskService.copyTask( task, listTaskConfigService, mapNewStates );
          }
          
          _prerequisiteManagementService.copyPrerequisite( idActionOld, idActionNew );

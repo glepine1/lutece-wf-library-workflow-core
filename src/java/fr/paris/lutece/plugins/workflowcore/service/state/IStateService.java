@@ -39,6 +39,7 @@ import fr.paris.lutece.plugins.workflowcore.service.config.ITaskConfigService;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  *
@@ -168,5 +169,7 @@ public interface IStateService
      * Copy the State.
      * @param state
      */
-    void copyState( State state, Locale locale, String strNewNameForCopy, List<ITaskConfigService> listTaskConfigService );
+    void copyState( State state, String strNewNameForCopy );
+    
+    void copyActionsOfStates( List<ITaskConfigService> listTaskConfigService, Locale locale, Map<Integer, Integer> mapNewStates );
 }
