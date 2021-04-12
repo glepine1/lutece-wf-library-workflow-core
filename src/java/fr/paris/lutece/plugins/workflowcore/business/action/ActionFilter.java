@@ -41,15 +41,15 @@ package fr.paris.lutece.plugins.workflowcore.business.action;
 public class ActionFilter
 {
     public static final int ALL_INT = -1;
-    private static final int TRUE = 1;
-    private static final int FALSE = 0;
+    public static final int TRUE = 1;
+    public static final int FALSE = 0;
     private int _nIdWorkFlow = ALL_INT;
     private int _nIdStateBefore = ALL_INT;
     private int _nIdStateAfter = ALL_INT;
     private int _nIdIcon = ALL_INT;
     private int _nIsAutomaticState = ALL_INT;
     private int _nIsMassAction = ALL_INT;
-    private boolean _bIsAutomaticReflexiveAction;
+    private int _nIsAutomaticReflexiveAction = ALL_INT;
 
     /**
      *
@@ -197,6 +197,15 @@ public class ActionFilter
     {
         return ( _nIsAutomaticState != ALL_INT );
     }
+    
+    /**
+    *
+    * @return true if the filter contain automatic reflexive actions
+    */
+   public boolean containsAutomaticReflexiveAction( )
+   {
+       return ( _nIsAutomaticReflexiveAction != ALL_INT );
+   }
 
     /**
      *
@@ -230,11 +239,11 @@ public class ActionFilter
     /**
      * Check if actions must be automatic reflexive actions, or regular actions
      * 
-     * @return True if actions must be automatic reflexive actions, false otherwise. If no value is specified, then only regular actions are returned
+     * @return 1 if actions must be automatic reflexive actions, 0 otherwise.
      */
-    public boolean isAutomaticReflexiveAction( )
+    public int isAutomaticReflexiveAction( )
     {
-        return _bIsAutomaticReflexiveAction;
+        return _nIsAutomaticReflexiveAction;
     }
 
     /**
@@ -245,6 +254,6 @@ public class ActionFilter
      */
     public void setAutomaticReflexiveAction( boolean bAutomaticReflexiveAction )
     {
-        _bIsAutomaticReflexiveAction = bAutomaticReflexiveAction;
+        _nIsAutomaticReflexiveAction = bAutomaticReflexiveAction ? TRUE : FALSE;
     }
 }

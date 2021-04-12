@@ -213,6 +213,7 @@ public class WorkflowService implements IWorkflowService
             ActionFilter filter = new ActionFilter( );
             filter.setIdStateBefore( resourceState.getId( ) );
             filter.setIdWorkflow( nIdWorkflow );
+            filter.setAutomaticReflexiveAction( false );
             listAction = _actionService.getListActionByFilter( filter );
         }
 
@@ -258,6 +259,7 @@ public class WorkflowService implements IWorkflowService
             ActionFilter actionfilter = new ActionFilter( );
             actionfilter.setIdStateBefore( state.getId( ) );
             actionfilter.setIdWorkflow( nIdWorkflow );
+            actionfilter.setAutomaticReflexiveAction( false );
 
             List<Action> listAction = _actionService.getListActionByFilter( actionfilter );
             listActionByStateId.put( state.getId( ), listAction );
@@ -309,6 +311,7 @@ public class WorkflowService implements IWorkflowService
         ActionFilter aFilter = new ActionFilter( );
         aFilter.setIdWorkflow( nIdWorkflow );
         aFilter.setIsMassAction( true );
+        aFilter.setAutomaticReflexiveAction( false );
 
         return _actionService.getListActionByFilter( aFilter );
     }
@@ -323,6 +326,7 @@ public class WorkflowService implements IWorkflowService
         aFilter.setIdWorkflow( nIdWorkflow );
         aFilter.setIsMassAction( true );
         aFilter.setIdStateBefore( stateId );
+        aFilter.setAutomaticReflexiveAction( false );
 
         return _actionService.getListActionByFilter( aFilter );
     }
@@ -520,6 +524,7 @@ public class WorkflowService implements IWorkflowService
             actionFilter.setIdWorkflow( action.getWorkflow( ).getId( ) );
             actionFilter.setIdStateBefore( state.getId( ) );
             actionFilter.setIsAutomaticState( 1 );
+            actionFilter.setAutomaticReflexiveAction( false );
 
             List<Action> listAction = _actionService.getListActionByFilter( actionFilter );
 
@@ -604,6 +609,7 @@ public class WorkflowService implements IWorkflowService
 
         ActionFilter actionFilter = new ActionFilter( );
         actionFilter.setIdWorkflow( nIdWorkflow );
+        actionFilter.setAutomaticReflexiveAction( false );
         listWorkflowAction = _actionService.getListActionByFilter( actionFilter );
 
         for ( Action action : listWorkflowAction )
@@ -641,6 +647,7 @@ public class WorkflowService implements IWorkflowService
 
         ActionFilter actionFilter = new ActionFilter( );
         actionFilter.setIdWorkflow( nIdWorflow );
+        actionFilter.setAutomaticReflexiveAction( false );
 
         List<Action> listWorkflowAction = _actionService.getListActionByFilter( actionFilter );
         List<ITask> listTask = new ArrayList<>( );
@@ -679,6 +686,7 @@ public class WorkflowService implements IWorkflowService
             actionFilter.setIdWorkflow( state.getWorkflow( ).getId( ) );
             actionFilter.setIdStateBefore( state.getId( ) );
             actionFilter.setIsAutomaticState( 1 );
+            actionFilter.setAutomaticReflexiveAction( false );
 
             List<Action> listAction = _actionService.getListActionByFilter( actionFilter );
 
